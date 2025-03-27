@@ -6,71 +6,64 @@ on:
 
 env:
   DOCKER_IMAGE_NAME: cadastro-usuarios
+  DOCKER_REGISTRY: docker.io
   RENDER_API_URL: https://api.render.com/v1
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
 
     steps:
-      # Passo 1: Checkout do código
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Passo 2: Configuração do JDK 21
       - name: Set up JDK 21
         uses: actions/setup-java@v3
         with:
           java-version: '21'
           distribution: 'temurin'
 
-      # Passo 3: Build com Maven
       - name: Build with Maven
         run: mvn clean package -DskipTests
 
-      # Passo 4: Configuração do Docker Buildx
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
 
-      # Passo 5: Login no Docker Hub
       - name: Login to Docker Hub
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
+          registry: ${{ env.DOCKER_REGISTRY }}
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
-      # Passo 6: Build e push da imagem Docker
       - name: Build and push Docker image
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           context: .
           push: true
           tags: |
             ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:latest
             ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.DOCKER_IMAGE_NAME }}:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
-      # Passo 7: Instalação do jq para processamento JSON
       - name: Install jq
         run: sudo apt-get install -y jq
 
-      # Passo 8: Deploy no Render via API
       - name: Deploy to Render
         run: |
-          # Obtém o ID do serviço dinamicamente
           SERVICE_ID=$(curl -s -X GET \
             -H "Accept: application/json" \
             -H "Authorization: Bearer ${{ secrets.RENDER_TOKEN }}" \
             "${{ env.RENDER_API_URL }}/services?name=${{ secrets.RENDER_SERVICE_NAME }}" \
             | jq -r '.[0].id')
 
-          # Dispara o deploy
           curl -X POST \
             -H "Accept: application/json" \
             -H "Authorization: Bearer ${{ secrets.RENDER_TOKEN }}" \
             -H "Content-Type: application/json" \
-            -d '{
-              "clearCache": "clear"
-            }' \
+            -d '{"clearCache": "clear"}' \
             "${{ env.RENDER_API_URL }}/services/$SERVICE_ID/deploys"
-
-          echo "Deploy realizado com sucesso!"
