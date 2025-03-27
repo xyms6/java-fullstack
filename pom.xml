@@ -12,9 +12,9 @@
     </parent>
 
     <groupId>com.example</groupId>
-    <artifactId>cadastrousuarios</artifactId>
+    <artifactId>cadastro-usuarios</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>cadastrousuarios</name>
+    <name>Sistema de Cadastro de Usuários</name>
     <description>Sistema de Cadastro de Usuários com Spring Boot</description>
 
     <properties>
