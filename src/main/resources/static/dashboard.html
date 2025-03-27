@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Dashboard</h1>
+        <button id="logoutBtn">Logout</button>
+    </header>
+    <main>
+        <section>
+            <h2>Operações CRUD</h2>
+            <div class="crud-section">
+                <div class="crud-operation">
+                    <h3>GET - Listar Usuários</h3>
+                    <button id="listarUsuariosBtn">Listar Usuários</button>
+                    <div id="listaUsuarios"></div>
+                </div>
+                <div class="crud-operation">
+                    <h3>GET - Buscar Usuário por ID</h3>
+                    <input type="number" id="usuarioId" placeholder="ID do usuário">
+                    <button id="buscarUsuarioBtn">Buscar</button>
+                    <div id="usuarioEncontrado"></div>
+                </div>
+                <div class="crud-operation">
+                    <h3>POST - Adicionar Usuário</h3>
+                    <input type="text" id="novoNome" placeholder="Nome">
+                    <input type="email" id="novoEmail" placeholder="Email">
+                    <input type="password" id="novaSenha" placeholder="Senha">
+                    <button id="adicionarUsuarioBtn">Adicionar</button>
+                </div>
+                <div class="crud-operation">
+                    <h3>PUT - Atualizar Usuário</h3>
+                    <input type="number" id="atualizarId" placeholder="ID">
+                    <input type="text" id="atualizarNome" placeholder="Novo Nome">
+                    <input type="email" id="atualizarEmail" placeholder="Novo Email">
+                    <button id="atualizarUsuarioBtn">Atualizar</button>
+                </div>
+                <div class="crud-operation">
+                    <h3>DELETE - Remover Usuário</h3>
+                    <input type="number" id="removerId" placeholder="ID">
+                    <button id="removerUsuarioBtn">Remover</button>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="/js/dashboard.js"></script>
+</body>
+</html>
