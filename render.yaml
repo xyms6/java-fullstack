@@ -24,5 +24,7 @@ services:
         fromDatabase:
           name: cadastro-usuarios-db
           property: password
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
     healthCheckPath: /actuator/health
     autoDeploy: true

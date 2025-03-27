@@ -82,40 +82,60 @@
         </dependency>
     </dependencies>
 
-    <build>
+<build>
+    <finalName>${project.artifactId}</finalName>  <!-- Adicione esta linha -->
     <resources>
-        <resource>
-            <directory>src/main/resources</directory>
-            <filtering>true</filtering>
-            <includes>
-                <include>**/*.properties</include>
-                <include>**/*.xml</include>
-            </includes>
-        </resource>
+        <!-- Mantenha sua configuração atual de resources -->
     </resources>
     
     <plugins>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-resources-plugin</artifactId>
-            <version>3.3.1</version>
+        <!-- Plugin Spring Boot (mantenha como está) -->
+         <plugin>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-maven-plugin</artifactId>
             <configuration>
-                <encoding>UTF-8</encoding>
-                <nonFilteredFileExtensions>
-                    <nonFilteredFileExtension>pdf</nonFilteredFileExtension>
-                    <nonFilteredFileExtension>png</nonFilteredFileExtension>
-                </nonFilteredFileExtensions>
+                <mainClass>com.example.cadastrousuarios.CadastroUsuariosApplication</mainClass>
+                <layout>JAR</layout>
             </configuration>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>repackage</goal>
+                    </goals>
+                </execution>
+            </executions>
         </plugin>
-        
+
+        <!-- Plugin Maven Compiler (atualize para versão mais recente) -->
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.11.0</version>
+            <version>3.12.1</version>
             <configuration>
                 <source>${java.version}</source>
                 <target>${java.version}</target>
                 <encoding>UTF-8</encoding>
+                <compilerArgs>
+                    <arg>-parameters</arg>  <!-- Importante para JPA -->
+                </compilerArgs>
+            </configuration>
+        </plugin>
+
+        <!-- Adicione este plugin para limpeza -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-clean-plugin</artifactId>
+            <version>3.3.2</version>
+            <configuration>
+                <filesets>
+                    <fileset>
+                        <directory>target</directory>
+                        <includes>
+                            <include>**/*</include>
+                        </includes>
+                        <followSymlinks>false</followSymlinks>
+                    </fileset>
+                </filesets>
             </configuration>
         </plugin>
     </plugins>
