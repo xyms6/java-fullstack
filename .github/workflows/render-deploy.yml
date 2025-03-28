@@ -38,3 +38,11 @@ jobs:
                 ${{ secrets.DOCKER_HUB_USERNAME }}/cadastro-usuarios:${{ github.sha }}
               cache-from: type=gha
               cache-to: type=gha,mode=max
+
+      - name: Deploy to Render
+          
+        uses: renderapp/render-action@master
+        env:  
+
+          RENDER_TOKEN: ${{ secrets.RENDER_TOKEN }}
+          RENDER_SERVICE: cadastro-usuarios # O nome do seu serviço no Render
